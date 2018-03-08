@@ -1,12 +1,11 @@
-import math
 from statistics import median
 from tkinter import *
 import platform
-from displayer.exceptions import TooBigNumbersError
-
+import math
 
 class Displayer(Canvas):
-    def __init__(self, root, x_min=-25.0, x_max=25.0, y_min=-25.0, y_max=25.0, size_x=500, size_y=500, border=50):
+    def __init__(self, root, title, x_axis_name, y_axis_name,
+                 x_min=-25.0, x_max=25.0, y_min=-25.0, y_max=25.0, size_x=500, size_y=500, border=50):
         self.motion = False
         self.root = root
         self.size_x = size_x
@@ -16,7 +15,10 @@ class Displayer(Canvas):
         self.x_max = x_max
         self.y_min = y_min
         self.y_max = y_max
-        self.functions_list = []
+        self.title = title
+        self.x_axis_name = x_axis_name
+        self.y_axis_name = y_axis_name
+        self.function_data = {}
         super(Displayer, self).__init__(self.root, width=self.size_x + self.border, height=self.size_y + self.border,
                                         bg='white')
         self.previous_mouse_x = 0
@@ -52,63 +54,47 @@ class Displayer(Canvas):
         if y_axis_position > self.size_y + self.border / 2:
             y_axis_position = self.size_y + self.border / 2
 
-        if self.functions_list:
+        if self.function_data:
 
             def draw_line():
                 if len(pp) > 1:
                     self.create_line(
                         pp,
-                        fill=self.default_colors[i % len(self.default_colors)],
+                        fill=self.default_colors[0],
                         width=2,
-                        tags=str(i))
+                        tags=str(0))
+            pp = []
+            prev_y = 0
+            is_prev_y_outside_borders = False
 
-            for i, f in enumerate(self.functions_list):
-                pp = []
-                prev_y = 0
-                is_prev_y_outside_borders = False
+            for x, y in self.function_data.items():
 
-                for x in range(self.size_x + 1):
-                    try:
-                        current_f_value = f((self.x_max - self.x_min) / self.size_x * x + self.x_min)
+                point = (
+                    (x - self.x_min) * self.size_x / (self.x_max - self.x_min) + self.border / 2,
+                    self.size_y - self.size_y * (y - self.y_min) / (self.y_max - self.y_min) + self.border / 2
+                )
 
-                        if isinstance(current_f_value, complex) and current_f_value.imag == 0:
-                            current_f_value = current_f_value.real
+                is_y_outside_borders = (point[1] < self.border / 2 or point[1] > self.size_y + self.border / 2)
 
-                    except OverflowError:
-                        index = self.functions_list.index(f)
-                        self.functions_list.remove(f)
-                        raise TooBigNumbersError(index)
+                if is_y_outside_borders:
+                    border_y = median((point[1], self.border / 2, self.size_y + self.border / 2))
+                    pp.append((point[0], border_y))
+                elif is_prev_y_outside_borders:
+                    border_y = median((prev_y, self.border / 2, self.size_y + self.border / 2))
+                    pp = [(point[0], border_y)] + pp
 
-                    point = (
-                        x + self.border // 2,
-                        self.size_y
-                        - (self.size_y * (current_f_value - self.y_min) / (self.y_max - self.y_min))
-                        + self.border // 2)
+                prev_y = point[1]
+                is_prev_y_outside_borders = is_y_outside_borders
 
-                    is_y_float = not (isinstance(point[1], complex) or math.isnan(point[1]))
-
-                    is_y_outside_borders = \
-                        is_y_float and (point[1] < self.border / 2 or point[1] > self.size_y + self.border / 2)
-
-                    if is_y_outside_borders:
-                        border_y = median((point[1], self.border / 2, self.size_y + self.border / 2))
-                        pp.append((point[0], border_y))
-                    elif is_y_float and is_prev_y_outside_borders:
-                        border_y = median((prev_y, self.border / 2, self.size_y + self.border / 2))
-                        pp = [(point[0], border_y)] + pp
-
-                    prev_y = point[1]
-                    is_prev_y_outside_borders = is_y_outside_borders
-
-                    if not is_y_float or is_y_outside_borders:
-                        draw_line()
-                        pp = []
-                        continue
-
-                    pp.append(point)
-
-                if len(pp) > 1:
+                if is_y_outside_borders:
                     draw_line()
+                    pp = []
+                    continue
+
+                pp.append(point)
+
+            if len(pp) > 1:
+                draw_line()
 
         # drawing axis lines
         self.create_line(y_axis_position, self.size_y + self.border // 2,
@@ -180,6 +166,13 @@ class Displayer(Canvas):
                              text=str(a / (10 ** n)), fill='black',
                              font=('Helvectica', '10'))
 
+        self.create_text(-15 + y_axis_position, self.border // 2,
+                         text=self.y_axis_name, fill='black',
+                         font=('Helvetica', 20))
+        self.create_text(self.size_x, -15 + x_axis_position,
+                         text=self.x_axis_name, fill='black',
+                         font=('Helvetica', 20))
+
     def add_point(self, x, y, color="black"):
         self.create_oval(
             x - 1,
@@ -194,8 +187,14 @@ class Displayer(Canvas):
         self.y_min = y_min
         self.y_max = y_max
 
-    def add_function(self, f):
-        self.functions_list.append(f)
+    def add_function_data(self):
+        self.function_data = {}
+        i = 0
+        x = self.x_min
+        while x < self.x_max:
+            self.function_data[x] = math.sin(x)
+            i += 1
+            x = self.x_min + (self.x_max - self.x_min) / 500 * i
 
     def delete_function(self, index):
         self.functions_list.pop(index)
@@ -226,6 +225,7 @@ class Displayer(Canvas):
             self.y_max += delta / 2
             self.x_min -= delta / 2
             self.y_min -= delta / 2
+            self.add_function_data()
             self.update_graph()
         except OverflowError:
             return
@@ -240,6 +240,16 @@ class Displayer(Canvas):
 
             self.y_max += dy
             self.y_min += dy
+            self.add_function_data()
             self.update_graph()
         self.previous_mouse_x = event.x
         self.previous_mouse_y = event.y
+
+
+if __name__ == '__main__':
+    root = Tk()
+    Canvas = Displayer(root, 'Title', 'x', 'y')
+    Canvas.add_function_data()
+    Canvas.update_graph()
+    Canvas.pack()
+    root.mainloop()
