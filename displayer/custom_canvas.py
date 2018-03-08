@@ -5,7 +5,7 @@ import math
 
 class Displayer(Canvas):
     def __init__(self, root, title, x_axis_name, y_axis_name,
-                 x_min=-25.0, x_max=25.0, y_min=-25.0, y_max=25.0, size_x=500, size_y=500, border=50):
+                 x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=500, size_y=500, border=50):
         self.motion = False
         self.root = root
         self.size_x = size_x
@@ -166,11 +166,14 @@ class Displayer(Canvas):
                              text=str(a / (10 ** n)), fill='black',
                              font=('Helvectica', '10'))
 
-        self.create_text(-15 + y_axis_position, self.border // 2,
+        self.create_text(-15 + y_axis_position, self.border // 2 + 10,
                          text=self.y_axis_name, fill='black',
-                         font=('Helvetica', 20))
+                         font=('Helvetica', 15))
         self.create_text(self.size_x, -15 + x_axis_position,
                          text=self.x_axis_name, fill='black',
+                         font=('Helvetica', 15))
+        self.create_text(self.size_x / 2 + self.border / 2, 12,
+                         text=self.title, fill='black',
                          font=('Helvetica', 20))
 
     def add_point(self, x, y, color="black"):
@@ -188,13 +191,9 @@ class Displayer(Canvas):
         self.y_max = y_max
 
     def add_function_data(self):
-        self.function_data = {}
-        i = 0
-        x = self.x_min
-        while x < self.x_max:
-            self.function_data[x] = math.sin(x)
-            i += 1
-            x = self.x_min + (self.x_max - self.x_min) / 500 * i
+        for x in range(-100, 100):
+            self.function_data[x] = x
+
 
     def delete_function(self, index):
         self.functions_list.pop(index)
