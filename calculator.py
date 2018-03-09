@@ -130,7 +130,6 @@ class Calculator:
         current_speed = speed
         current_time = 0
 
-
         while t <= time:
 
             if current_mass > final_mass:
@@ -157,7 +156,7 @@ class Calculator:
                 force = 0
 
             current_speed = current_speed + \
-                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2)\
                 * delta_t / current_mass
 
             current_height = current_height + current_speed * delta_t
