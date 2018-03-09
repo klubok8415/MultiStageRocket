@@ -113,14 +113,14 @@ class Calculator:
         for i in range(101):
             self.cx_dictionary[i*3.4] = self.cx_list[i]
 
-    def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01, resistance=0):
+    def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01):
         diameter = self.stages_data[self.current_stage]['diameter']
         force = self.stages_data[self.current_stage]['force']
         consumption = self.stages_data[self.current_stage]['consumption']
         time = self.stages_data[self.current_stage]['time']
         initial_mass = self.stages_data[self.current_stage]['initial_mass']
         final_mass = self.stages_data[self.current_stage]['final_mass']
-        resistance = self.stages_data[self.current_stage]['resistance']
+
         height = 0
         speed = 0
         t = 0
@@ -129,7 +129,7 @@ class Calculator:
         current_mass = initial_mass
         current_speed = speed
         current_time = 0
-        current_resistance = self.cx_dictionary[current_speed]
+
 
         while t <= time:
 
@@ -181,12 +181,12 @@ if __name__ == '__main__':
     calculator = Calculator(stages=1)
     calculator.add_data(
         diameter=0.05,
-        force=100,
+        force=200,
         consumption=1,
         time=100,
         initial_mass=2,
         final_mass=1,
-        resistance=0.66
+
     )
 
     calculator.count()
