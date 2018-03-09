@@ -1,7 +1,6 @@
 from statistics import median
 from tkinter import *
 import platform
-import math
 
 
 class Displayer(Canvas):

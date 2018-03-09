@@ -37,8 +37,8 @@ class MainFrame(Frame):
 
     def start(self):
         for displayer in self.displayers_list:
-            displayer.update_graph()
             displayer.add_function_data()
+            displayer.update_graph()
         self.root.mainloop()
 
 
