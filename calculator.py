@@ -152,16 +152,16 @@ class Calculator:
                 while round(additional_speed, 1) not in self.cx_dictionary.keys():
                     additional_speed += 0.1
                 current_resistance = self.cx_dictionary[round(additional_speed, 1)]
-            self.speed_list[round(current_time + t, 3)] = current_speed
-            self.height_list[round(current_time + t, 3)] = current_height
 
-            if t >= (initial_mass - final_mass) / consumption:
+            self.speed_list[round(current_time+t, 3)] = current_speed
+            self.height_list[round(current_time+t, 3)] = current_height
+
+            if t >= (initial_mass - final_mass)/consumption:
                 force = 0
 
             current_speed = current_speed + \
-                            (
-                                    force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
-                            * delta_t / current_mass
+                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2)\
+                * delta_t / current_mass
 
             current_height = current_height + current_speed * delta_t
 
