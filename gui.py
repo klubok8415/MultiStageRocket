@@ -9,15 +9,18 @@ class MainFrame(Frame):
         super(MainFrame, self).__init__(self.root)
         self.calculator = Calculator(3)
 
+        self.stages_frame = Frame(self.root)
+        self.stages_frame.pack(fill=X, expand=1)
         self.displayer_frame = Frame(self.root)
+        self.displayer_frame.pack()
 
         self.displayer1 = Displayer(self.displayer_frame)
         self.displayer1.grid(row=0)
         self.displayer2 = Displayer(self.displayer_frame)
         self.displayer2.grid(row=0, column=1)
 
-        self.stage1_frame = Frame(self.root)
-        self.stage1_frame.grid(row=0, column=0)
+        self.stage1_frame = Frame(self.stages_frame)
+        self.stage1_frame.pack(side=LEFT, fill=X, expand=1)
 
         self.stage1_diameter_label = Label(self.stage1_frame, text='diameter')
         self.stage1_diameter_label.grid(row=0, column=0)
@@ -56,8 +59,8 @@ class MainFrame(Frame):
         self.stage1_resistance_parachute_entry = Entry(self.stage1_frame)
         self.stage1_resistance_parachute_entry.grid(row=8, column=1)
 
-        self.stage2_frame = Frame(self.root, padx=50)
-        self.stage2_frame.grid(row=0, column=1)
+        self.stage2_frame = Frame(self.stages_frame, padx=50)
+        self.stage2_frame.pack(side=LEFT, fill=X, expand=1)
 
         self.stage2_diameter_label = Label(self.stage2_frame, text='diameter')
         self.stage2_diameter_label.grid(row=0, column=0)
@@ -96,8 +99,8 @@ class MainFrame(Frame):
         self.stage2_resistance_parachute_entry = Entry(self.stage2_frame)
         self.stage2_resistance_parachute_entry.grid(row=8, column=1)
 
-        self.stage3_frame = Frame(self.root)
-        self.stage3_frame.grid(row=0, column=2)
+        self.stage3_frame = Frame(self.stages_frame)
+        self.stage3_frame.pack(side=LEFT, fill=X, expand=1)
 
         self.stage3_diameter_label = Label(self.stage3_frame, text='diameter')
         self.stage3_diameter_label.grid(row=0, column=0)

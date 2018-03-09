@@ -156,14 +156,17 @@ class Calculator:
             if t >= (initial_mass - final_mass)/consumption:
                 force = 0
 
-            current_speed = current_speed + (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) * delta_t / current_mass
+            current_speed = current_speed + \
+                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                * delta_t / current_mass
 
             current_height = current_height + current_speed * delta_t
 
             t += delta_t
 
             if current_height < 0:
-                print('Falcon has landed with landing velocity {} m/s'.format(round(abs(self.speed_list[round(t-delta_t, 2)]), 2)))
+                print('Falcon has landed with landing velocity {} m/s'.format(
+                    round(abs(self.speed_list[round(t-delta_t, 2)]), 2)))
                 return
 
         current_time += time
