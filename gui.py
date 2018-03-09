@@ -19,6 +19,16 @@ class MainFrame(Frame):
         self.displayer2 = Displayer(self.displayer_frame)
         self.displayer2.grid(row=0, column=1)
 
+        self.general_data_frame = Frame(self.stages_frame)
+        self.general_data_frame.pack(side=LEFT, fill=X, expand=1)
+
+        self.general_data_title = Label(self.general_data_frame, text='general data')
+        self.general_data_title.grid(row=0, columnspan=2)
+        self.parachute_diameter_label = Label(self.general_data_frame, text='parachute diameter')
+        self.parachute_diameter_label.grid(row=1, column=0)
+        self.parachute_diameter_entry = Entry(self.general_data_frame)
+        self.parachute_diameter_entry.grid(row=1, column=1)
+
         self.stage1_frame = Frame(self.stages_frame)
         self.stage1_frame.pack(side=LEFT, fill=X, expand=1)
 
