@@ -3,8 +3,9 @@ from tkinter import *
 import platform
 import math
 
+
 class Displayer(Canvas):
-    def __init__(self, root, title, x_axis_name, y_axis_name,
+    def __init__(self, root, title='Title', x_axis_name='X', y_axis_name='Y',
                  x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=500, size_y=500, border=50):
         self.motion = False
         self.root = root
@@ -184,12 +185,6 @@ class Displayer(Canvas):
             self.size_y * y - 1,
             fill=color)
 
-    def rescale(self, x_min, x_max, y_min, y_max):
-        self.x_max = x_max
-        self.x_min = x_min
-        self.y_min = y_min
-        self.y_max = y_max
-
     def add_function_data(self):
         for x in range(-100, 100):
             self.function_data[x] = x
@@ -224,7 +219,6 @@ class Displayer(Canvas):
             self.y_max += delta / 2
             self.x_min -= delta / 2
             self.y_min -= delta / 2
-            self.add_function_data()
             self.update_graph()
         except OverflowError:
             return
@@ -239,7 +233,6 @@ class Displayer(Canvas):
 
             self.y_max += dy
             self.y_min += dy
-            self.add_function_data()
             self.update_graph()
         self.previous_mouse_x = event.x
         self.previous_mouse_y = event.y
