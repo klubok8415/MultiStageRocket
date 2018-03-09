@@ -7,8 +7,12 @@ class MainFrame(Frame):
         self.root = Tk()
         super(MainFrame, self).__init__(self.root)
 
-        self.displayer = Displayer(self.root)
-        self.displayer.pack()
+        self.displayer1 = Displayer(self.root)
+        self.displayer1.grid(row=0)
+        self.displayer2 = Displayer(self.root)
+        self.displayer2.grid(row=0, column=1)
+
+        self.displayers_list = [self.displayer1, self.displayer2]
 
         self.root.update()
         self.root.minsize(self.root.winfo_width(), self.root.winfo_height())
@@ -18,21 +22,23 @@ class MainFrame(Frame):
         self.root.bind('<Configure>', self.root_resize)
 
     def root_resize(self, event):
-        delta_x = self.root.winfo_width() - self.size_x_prev
-        delta_y = self.root.winfo_height() - self.size_y_prev
+        delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
+        delta_y = (self.root.winfo_height() - self.size_y_prev) / len(self.displayers_list)
         if delta_x != 0 or delta_y != 0:
-            self.displayer.size_x += delta_x
-            self.displayer.size_y += delta_y
-            self.displayer.config(width=self.displayer.size_x + self.displayer.border,
-                                  height=self.displayer.size_y + self.displayer.border)
-            self.displayer.delete(ALL)
-            self.displayer.update_graph()
-            self.size_x_prev += delta_x
-            self.size_y_prev += delta_y
+            for displayer in self.displayers_list:
+                displayer.size_x += delta_x
+                displayer.size_y += delta_y
+                displayer.config(width=displayer.size_x + displayer.border,
+                                      height=displayer.size_y + displayer.border)
+                displayer.delete(ALL)
+                displayer.update_graph()
+                self.size_x_prev += delta_x
+                self.size_y_prev += delta_y
 
     def start(self):
-        self.displayer.update_graph()
-        self.displayer.add_function_data()
+        for displayer in self.displayers_list:
+            displayer.update_graph()
+            displayer.add_function_data()
         self.root.mainloop()
 
 
