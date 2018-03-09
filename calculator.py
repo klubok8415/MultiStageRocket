@@ -3,6 +3,7 @@ from math import *
 
 class Calculator:
     def __init__(self, stages):
+        self.parachute_data = 0
         self.stages_data = []
         self.speed_list = {}
         self.height_list = {}
@@ -111,13 +112,16 @@ class Calculator:
                         0.640621228]
         self.cx_dictionary = {}
         for i in range(101):
-            self.cx_dictionary[i*3.4] = self.cx_list[i]
+            self.cx_dictionary[i * 3.4] = self.cx_list[i]
 
     def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01):
         diameter = self.stages_data[self.current_stage]['diameter']
         force = self.stages_data[self.current_stage]['force']
         consumption = self.stages_data[self.current_stage]['consumption']
-        time = self.stages_data[self.current_stage]['time']
+        if self.parachute_data['check_parachute'] == self.current_stage:
+            time = self.parachute_data['time_parachute']
+        else:
+            time = self.stages_data[self.current_stage]['time']
         initial_mass = self.stages_data[self.current_stage]['initial_mass']
         final_mass = self.stages_data[self.current_stage]['final_mass']
 
@@ -129,7 +133,6 @@ class Calculator:
         current_mass = initial_mass
         current_speed = speed
         current_time = 0
-
 
         while t <= time:
 
@@ -149,16 +152,16 @@ class Calculator:
                 while round(additional_speed, 1) not in self.cx_dictionary.keys():
                     additional_speed += 0.1
                 current_resistance = self.cx_dictionary[round(additional_speed, 1)]
+            self.speed_list[round(current_time + t, 3)] = current_speed
+            self.height_list[round(current_time + t, 3)] = current_height
 
-            self.speed_list[round(current_time+t, 3)] = current_speed
-            self.height_list[round(current_time+t, 3)] = current_height
-
-            if t >= (initial_mass - final_mass)/consumption:
+            if t >= (initial_mass - final_mass) / consumption:
                 force = 0
 
             current_speed = current_speed + \
-                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
-                * delta_t / current_mass
+                            (
+                                    force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                            * delta_t / current_mass
 
             current_height = current_height + current_speed * delta_t
 
@@ -166,8 +169,22 @@ class Calculator:
 
             if current_height < 0:
                 print('Falcon has landed with landing velocity {} m/s'.format(
-                    round(abs(self.speed_list[round(t-delta_t, 2)]), 2)))
+                    round(abs(self.speed_list[round(t - delta_t, 2)]), 2)))
                 return
+
+        if self.parachute_data['check_parachute'] == self.current_stage:
+            t = 0
+            while current_height >= 0:
+                current_density = density * 10 ** (-b * current_height)
+                self.speed_list[round(current_time + t, 3)] = current_speed
+                self.height_list[round(current_time + t, 3)] = current_height
+                area = pi * (self.parachute_data['parachute_diameter']/2)**2
+                current_speed = current_speed + \
+                                (self.parachute_data['parachute_resistance'] * area * current_speed ** 2 * current_density / 2
+                                 -current_mass * gravity) \
+                                * delta_t / current_mass
+
+                current_height = current_height + current_speed * delta_t
 
         current_time += time
         self.stage_counter -= 1
@@ -176,13 +193,16 @@ class Calculator:
         if self.stage_counter > 0:
             self.count()
 
-    def add_data(self, **kwargs):
+    def add_data_stage(self, **kwargs):
         self.stages_data.append(kwargs)
+
+    def add_data_parachute(self, **kwargs):
+        self.parachute_data = kwargs
 
 
 if __name__ == '__main__':
     calculator = Calculator(stages=1)
-    calculator.add_data(
+    calculator.add_data_parachute(
         diameter=0.05,
         force=200,
         consumption=1,

@@ -149,8 +149,8 @@ class MainFrame(Frame):
         self.root.bind('<Configure>', self.root_resize)
 
     def on_click(self):
-        self.calculator.add_data()
-        self.calculator.add_data()
+        self.calculator.add_data_parachute()
+        self.calculator.add_data_parachute()
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
