@@ -6,7 +6,7 @@ import math
 
 class Displayer(Canvas):
     def __init__(self, root, title='Title', x_axis_name='X', y_axis_name='Y',
-                 x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=500, size_y=500, border=50):
+                 x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=250, size_y=250, border=50):
         self.motion = False
         self.root = root
         self.size_x = size_x
