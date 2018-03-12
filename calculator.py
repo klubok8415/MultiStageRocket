@@ -1,4 +1,5 @@
 from math import *
+from calculation_exceptions import OverSpeedError
 
 
 class Calculator:
@@ -143,15 +144,15 @@ class Calculator:
 
             current_density = density * 10 ** (-b * current_height)
 
-            additional_speed = current_speed
-            if additional_speed > 0:
-                while round(additional_speed, 1) not in self.cx_dictionary.keys():
-                    additional_speed -= 0.1
-                current_resistance = self.cx_dictionary[round(additional_speed, 1)]
+            speed_for_cx = current_speed
+            if speed_for_cx > 0:
+                while round(speed_for_cx, 1) not in self.cx_dictionary.keys():
+                    speed_for_cx -= 0.1
+                current_resistance = self.cx_dictionary[round(speed_for_cx, 1)]
             else:
-                while round(additional_speed, 1) not in self.cx_dictionary.keys():
-                    additional_speed += 0.1
-                current_resistance = self.cx_dictionary[round(additional_speed, 1)]
+                while round(speed_for_cx, 1) not in self.cx_dictionary.keys():
+                    speed_for_cx += 0.1
+                current_resistance = self.cx_dictionary[round(speed_for_cx, 1)]
 
             self.speed_list[round(current_time+t, 3)] = current_speed
             self.height_list[round(current_time+t, 3)] = current_height
@@ -162,6 +163,9 @@ class Calculator:
             current_speed = current_speed + \
                 (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2)\
                 * delta_t / current_mass
+
+            if current_speed > 340:
+                raise OverSpeedError('Speed limit reached')
 
             current_height = current_height + current_speed * delta_t
 
@@ -202,7 +206,7 @@ class Calculator:
 
 if __name__ == '__main__':
     calculator = Calculator(stages=1)
-    calculator.add_data_parachute(
+    calculator.add_data_stage(
         diameter=0.05,
         force=200,
         consumption=1,

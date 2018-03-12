@@ -1,3 +1,3 @@
-from gui import MainFrame
+from gui.MainFrame import MainFrame
 
 MainFrame().start()

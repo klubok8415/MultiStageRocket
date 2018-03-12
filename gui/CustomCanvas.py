@@ -3,7 +3,7 @@ from tkinter import *
 import platform
 
 
-class Displayer(Canvas):
+class CustomCanvas(Canvas):
     def __init__(self, root, title='Title', x_axis_name='X', y_axis_name='Y',
                  x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=250, size_y=250, border=50):
         self.motion = False
@@ -19,8 +19,8 @@ class Displayer(Canvas):
         self.x_axis_name = x_axis_name
         self.y_axis_name = y_axis_name
         self.function_data = {}
-        super(Displayer, self).__init__(self.root, width=self.size_x + self.border, height=self.size_y + self.border,
-                                        bg='white')
+        super(CustomCanvas, self).__init__(self.root, width=self.size_x + self.border, height=self.size_y + self.border,
+                                           bg='white')
         self.previous_mouse_x = 0
         self.previous_mouse_y = 0
         self.bind('<Motion>', self.on_motion)
@@ -239,7 +239,7 @@ class Displayer(Canvas):
 
 if __name__ == '__main__':
     root = Tk()
-    Canvas = Displayer(root, 'Title', 'x', 'y')
+    Canvas = CustomCanvas(root, 'Title', 'x', 'y')
     Canvas.add_function_data()
     Canvas.update_graph()
     Canvas.pack()
