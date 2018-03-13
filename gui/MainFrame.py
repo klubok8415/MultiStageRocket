@@ -29,6 +29,14 @@ class MainFrame(Frame):
         self.parachute_diameter_label.grid(row=1, column=0)
         self.parachute_diameter_entry = EntryWithBackgroundText(self.general_data_frame, background_text='metres')
         self.parachute_diameter_entry.grid(row=1, column=1)
+        self.parachute_time_label = Label(self.general_data_frame, text='parachute time')
+        self.parachute_time_label.grid(row=2, column=0)
+        self.parachute_time_entry = EntryWithBackgroundText(self.general_data_frame, background_text='sec')
+        self.parachute_time_entry.grid(row=2, column=1)
+        self.number_of_steps = Label(self.general_data_frame, text='number of steps')
+        self.number_of_steps.grid(row=3, column=0)
+        self.number_of_steps = EntryWithBackgroundText(self.general_data_frame, background_text='pcs')
+        self.number_of_steps.grid(row=3, column=1)
         # self.stage0_force_label = Label(self.general_data_frame, text='force')
         # self.stage0_force_label.grid(row=2, column=0)
         # self.stage0_force_entry = EntryWithBackgroundText(self.general_data_frame, background_text='N')
@@ -65,8 +73,8 @@ class MainFrame(Frame):
         self.stage1_force_entry.grid(row=2, column=1)
         self.stage1_consumption_label = Label(self.stage1_frame, text='consumption')
         self.stage1_consumption_label.grid(row=3, column=0)
-        self.stage1_consumption = EntryWithBackgroundText(self.stage1_frame, background_text='kg/sec')
-        self.stage1_consumption.grid(row=3, column=1)
+        self.stage1_consumption_entry = EntryWithBackgroundText(self.stage1_frame, background_text='kg/sec')
+        self.stage1_consumption_entry.grid(row=3, column=1)
         self.stage1_time_label = Label(self.stage1_frame, text='time')
         self.stage1_time_label.grid(row=4, column=0)
         self.stage1_time = EntryWithBackgroundText(self.stage1_frame, background_text='sec')
@@ -150,8 +158,34 @@ class MainFrame(Frame):
         self.root.bind('<Configure>', self.root_resize)
 
     def on_click(self):
-        self.calculator.add_data_parachute()
-        self.calculator.add_data_parachute()
+        if self.number_of_steps.get() == 0:
+            pass
+        if self.number_of_steps.get() == 1:
+            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(), consumption=self.stage1_consumption_entry.get(),
+                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
+                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
+        if self.number_of_steps.get() == 2:
+            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(),
+                                           consumption=self.stage1_consumption_entry.get(),
+                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
+                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
+            self.calculator.add_data_stage(diameter=self.stage2_diameter_entry.get(), consumption=self.stage2_consumption.get(),
+                                           final_mass=self.stage2_final_mass.get(), force=self.stage2_force_entry.get(),
+                                           initial_mass=self.stage2_initial_mass.get(), time=self.stage2_time)
+        if self.number_of_steps.get() == 3:
+            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(),
+                                           consumption=self.stage1_consumption_entry.get(),
+                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
+                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
+            self.calculator.add_data_stage(diameter=self.stage2_diameter_entry.get(),
+                                           consumption=self.stage2_consumption.get(),
+                                           final_mass=self.stage2_final_mass.get(), force=self.stage2_force_entry.get(),
+                                           initial_mass=self.stage2_initial_mass.get(), time=self.stage2_time)
+            self.calculator.add_data_stage(diameter=self.stage3_diameter_entry.get(), consumption=self.stage3_consumption.get(),
+                                           final_mass=self.stage3_final_mass.get(), force=self.stage3_force_entry.get(),
+                                           initial_mass=self.stage3_initial_mass.get(), time=self.stage3_time)
+        self.calculator.add_data_parachute(time=self.parachute_time_entry.get(), check_parachute=self.number_of_steps.get(),
+                                           diameter=self.parachute_diameter_entry.get())
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)

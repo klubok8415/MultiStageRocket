@@ -4,7 +4,7 @@ from calculation_exceptions import OverSpeedError
 
 class Calculator:
     def __init__(self, stages):
-        self.parachute_data = 0
+        self.parachute_data = {}
         self.stages_data = []
         self.speed_list = {}
         self.height_list = {}
@@ -116,15 +116,15 @@ class Calculator:
             self.cx_dictionary[i * 3.4] = self.cx_list[i]
 
     def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01):
-        diameter = self.stages_data[self.current_stage]['diameter']
-        force = self.stages_data[self.current_stage]['force']
-        consumption = self.stages_data[self.current_stage]['consumption']
+        diameter = self.stages_data[self.current_stage - 1]['diameter']
+        force = self.stages_data[self.current_stage - 1]['force']
+        consumption = self.stages_data[self.current_stage - 1]['consumption']
         if self.parachute_data['check_parachute'] == self.current_stage:
             time = self.parachute_data['time_parachute']
         else:
-            time = self.stages_data[self.current_stage]['time']
-        initial_mass = self.stages_data[self.current_stage]['initial_mass']
-        final_mass = self.stages_data[self.current_stage]['final_mass']
+            time = self.stages_data[self.current_stage - 1]['time']
+        initial_mass = self.stages_data[self.current_stage - 1]['initial_mass']
+        final_mass = self.stages_data[self.current_stage - 1]['final_mass']
 
         height = 0
         speed = 0
@@ -154,15 +154,16 @@ class Calculator:
                     speed_for_cx += 0.1
                 current_resistance = self.cx_dictionary[round(speed_for_cx, 1)]
 
-            self.speed_list[round(current_time+t, 3)] = current_speed
-            self.height_list[round(current_time+t, 3)] = current_height
+            self.speed_list[round(current_time + t, 3)] = current_speed
+            self.height_list[round(current_time + t, 3)] = current_height
 
-            if t >= (initial_mass - final_mass)/consumption:
+            if t >= (initial_mass - final_mass) / consumption:
                 force = 0
 
             current_speed = current_speed + \
-                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2)\
-                * delta_t / current_mass
+                            (
+                                        force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                            * delta_t / current_mass
 
             if current_speed > 340:
                 raise OverSpeedError('Speed limit reached')
@@ -182,10 +183,11 @@ class Calculator:
                 current_density = density * 10 ** (-b * current_height)
                 self.speed_list[round(current_time + t, 3)] = current_speed
                 self.height_list[round(current_time + t, 3)] = current_height
-                area = pi * (self.parachute_data['parachute_diameter']/2)**2
+                area = pi * (self.parachute_data['parachute_diameter'] / 2) ** 2
                 current_speed = current_speed + \
-                                (self.parachute_data['parachute_resistance'] * area * current_speed ** 2 * current_density / 2
-                                 -current_mass * gravity) \
+                                (self.parachute_data[
+                                     'parachute_resistance'] * area * current_speed ** 2 * current_density / 2
+                                 - current_mass * gravity) \
                                 * delta_t / current_mass
 
                 current_height = current_height + current_speed * delta_t
@@ -198,9 +200,11 @@ class Calculator:
             self.count()
 
     def add_data_stage(self, **kwargs):
+        self.stages_data.clear()
         self.stages_data.append(kwargs)
 
     def add_data_parachute(self, **kwargs):
+        self.parachute_data.clear()
         self.parachute_data = kwargs
 
 
