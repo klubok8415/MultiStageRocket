@@ -3,7 +3,6 @@ from gui.CustomCanvas import CustomCanvas
 from gui.EntryWithBackgroundText import EntryWithBackgroundText
 from calculator import Calculator
 
-
 class MainFrame(Frame):
     def __init__(self):
         self.root = Tk()
@@ -15,10 +14,10 @@ class MainFrame(Frame):
         self.displayer_frame = Frame(self.root, pady=20)
         self.displayer_frame.pack()
 
-        self.displayer1 = CustomCanvas(self.displayer_frame)
-        self.displayer1.grid(row=0)
-        self.displayer2 = CustomCanvas(self.displayer_frame)
-        self.displayer2.grid(row=0, column=1)
+        self.velocity_by_time_displayer = CustomCanvas(self.displayer_frame)
+        self.velocity_by_time_displayer.grid(row=0)
+        self.height_by_time_displayer = CustomCanvas(self.displayer_frame)
+        self.height_by_time_displayer.grid(row=0, column=1)
 
         self.general_data_frame = Frame(self.stages_frame, padx=25)
         self.general_data_frame.pack(side=LEFT, fill=X, expand=1)
@@ -37,26 +36,6 @@ class MainFrame(Frame):
         self.number_of_steps.grid(row=3, column=0)
         self.number_of_steps = EntryWithBackgroundText(self.general_data_frame, background_text='pcs')
         self.number_of_steps.grid(row=3, column=1)
-        # self.stage0_force_label = Label(self.general_data_frame, text='force')
-        # self.stage0_force_label.grid(row=2, column=0)
-        # self.stage0_force_entry = EntryWithBackgroundText(self.general_data_frame, background_text='N')
-        # self.stage0_force_entry.grid(row=2, column=1)
-        # self.stage0_consumption_label = Label(self.general_data_frame, text='consumption')
-        # self.stage0_consumption_label.grid(row=3, column=0)
-        # self.stage0_consumption = EntryWithBackgroundText(self.general_data_frame, background_text='kg/sec')
-        # self.stage0_consumption.grid(row=3, column=1)
-        # self.stage0_time_label = Label(self.general_data_frame, text='time')
-        # self.stage0_time_label.grid(row=4, column=0)
-        # self.stage0_time = EntryWithBackgroundText(self.general_data_frame, background_text='sec')
-        # self.stage0_time.grid(row=4, column=1)
-        # self.stage0_initial_mass_label = Label(self.general_data_frame, text='initial_mass')
-        # self.stage0_initial_mass_label.grid(row=5, column=0)
-        # self.stage0_initial_mass = EntryWithBackgroundText(self.general_data_frame, background_text='kg')
-        # self.stage0_initial_mass.grid(row=5, column=1)
-        # self.stage0_final_mass_label = Label(self.general_data_frame, text='final_mass')
-        # self.stage0_final_mass_label.grid(row=6, column=0)
-        # self.stage0_final_mass = EntryWithBackgroundText(self.general_data_frame, background_text='kg')
-        # self.stage0_final_mass.grid(row=6, column=1)
 
         self.stage1_frame = Frame(self.stages_frame, padx=25)
         self.stage1_frame.pack(side=LEFT, fill=X, expand=1)
@@ -175,7 +154,8 @@ class MainFrame(Frame):
         if self.number_of_steps.get() == 3:
             self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(),
                                            consumption=self.stage1_consumption_entry.get(),
-                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
+                                           final_mass=self.stage1_final_mass.get(),
+                                           force=self.stage1_force_entry.get(),
                                            initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
             self.calculator.add_data_stage(diameter=self.stage2_diameter_entry.get(),
                                            consumption=self.stage2_consumption.get(),
@@ -186,6 +166,9 @@ class MainFrame(Frame):
                                            initial_mass=self.stage3_initial_mass.get(), time=self.stage3_time)
         self.calculator.add_data_parachute(time=self.parachute_time_entry.get(), check_parachute=self.number_of_steps.get(),
                                            diameter=self.parachute_diameter_entry.get())
+        self.calculator.count(int(self.number_of_steps.get()))
+        self.velocity_by_time_displayer.add_function_data(self.calculator.speed_list)
+        self.height_by_time_displayer.add_function_data(self.calculator.height_list)
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
@@ -203,7 +186,6 @@ class MainFrame(Frame):
 
     def start(self):
         for displayer in self.displayers_list:
-            displayer.add_function_data()
             displayer.update_graph()
         self.root.mainloop()
 
