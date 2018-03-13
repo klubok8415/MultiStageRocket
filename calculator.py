@@ -191,7 +191,7 @@ class Calculator:
                                  - current_mass * gravity) \
                                 * delta_t / current_mass
 
-                current_height = current_height + current_speed * delta_t22
+                current_height = current_height + current_speed * delta_t
 
         current_time += time
         self.stages_counter -= 1
@@ -210,7 +210,7 @@ class Calculator:
 
 
 if __name__ == '__main__':
-    calculator = Calculator(stages=1)
+    calculator = Calculator()
     calculator.add_data_stage(
         diameter=0.05,
         force=200,

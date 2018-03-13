@@ -29,39 +29,42 @@ class MainFrame(Frame):
         self.general_data_frame = Frame(self.stages_frame, padx=25)
         self.general_data_frame.pack(side=LEFT, fill=X, expand=1)
 
+        self.check_parachute = BooleanVar(self.root, value=0)
         self.general_data_title = Label(self.general_data_frame, text='general data')
         self.general_data_title.grid(row=0, columnspan=2)
+        self.parachute_checkbox = Checkbutton(self.general_data_frame, text='parachute', variable=self.check_parachute, command=self.on_checkbox_check_parachute)
+        self.parachute_checkbox.grid(row=1, columnspan=2)
         self.parachute_diameter_label = Label(self.general_data_frame, text='parachute diameter')
-        self.parachute_diameter_label.grid(row=1, column=0)
+        self.parachute_diameter_label.grid(row=2, column=0)
         self.parachute_diameter_entry = EntryWithBackgroundText(self.general_data_frame, background_text='metres')
-        self.parachute_diameter_entry.grid(row=1, column=1)
+        self.parachute_diameter_entry.grid(row=2, column=1)
         self.parachute_time_label = Label(self.general_data_frame, text='parachute time')
-        self.parachute_time_label.grid(row=2, column=0)
+        self.parachute_time_label.grid(row=3, column=0)
         self.parachute_time_entry = EntryWithBackgroundText(self.general_data_frame, background_text='sec')
-        self.parachute_time_entry.grid(row=2, column=1)
+        self.parachute_time_entry.grid(row=3, column=1)
 
         self.stages_counter_label = Label(self.general_data_frame, text='number of stages')
-        self.stages_counter_label.grid(row=3, columnspan=2)
+        self.stages_counter_label.grid(row=4, columnspan=2)
         self.stages_counter = IntVar(self.root, value=1)
         self.one_stage_button = Radiobutton(self.general_data_frame,
                                             text='1',
                                             variable=self.stages_counter,
                                             value=1,
                                             command=self.change_stage_number)
-        self.one_stage_button.grid(row=4, columnspan=2)
+        self.one_stage_button.grid(row=5, columnspan=2)
         self.two_stages_button = Radiobutton(self.general_data_frame,
                                              text='2',
                                              variable=self.stages_counter,
                                              value=2,
                                              command=self.change_stage_number)
-        self.two_stages_button.grid(row=5, columnspan=2)
+        self.two_stages_button.grid(row=6, columnspan=2)
         self.three_stages_button = Radiobutton(self.general_data_frame,
                                                text='3',
                                                variable=self.stages_counter,
                                                value=3,
                                                command=self.change_stage_number)
 
-        self.three_stages_button.grid(row=6, columnspan=2)
+        self.three_stages_button.grid(row=7, columnspan=2)
 
         self.stage1_frame = Frame(self.stages_frame, padx=25)
         self.stage1_frame.pack(side=LEFT, fill=X, expand=1)
@@ -289,6 +292,18 @@ class MainFrame(Frame):
                 entry.config(state=NORMAL)
                 entry.change_exit(1)
 
+    def on_checkbox_check_parachute(self):
+        if self.check_parachute.get():
+            self.parachute_diameter_entry.config(state=NORMAL)
+            self.parachute_diameter_entry.change_exit(1)
+            self.parachute_time_entry.config(state=NORMAL)
+            self.parachute_time_entry.change_exit(1)
+        else:
+            self.parachute_diameter_entry.delete(0, 'end')
+            self.parachute_time_entry.delete(0, 'end')
+            self.parachute_diameter_entry.config(state=DISABLED)
+            self.parachute_time_entry.config(state=DISABLED)
+
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
         delta_y = (self.root.winfo_height() - self.size_y_prev) / len(self.displayers_list)
@@ -307,6 +322,7 @@ class MainFrame(Frame):
         self.height_by_time_displayer.update_graph()
         self.velocity_by_time_displayer.update_graph()
         self.change_stage_number()
+        self.on_checkbox_check_parachute()
         self.root.mainloop()
 
 
