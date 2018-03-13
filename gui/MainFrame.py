@@ -161,31 +161,47 @@ class MainFrame(Frame):
         if self.number_of_steps.get() == 0:
             pass
         if self.number_of_steps.get() == 1:
-            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(), consumption=self.stage1_consumption_entry.get(),
-                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
-                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
+            self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
+                                           consumption=float(self.stage1_consumption_entry.get()),
+                                           final_mass=float(self.stage1_final_mass.get()),
+                                           force=float(self.stage1_force_entry.get()),
+                                           initial_mass=float(self.stage1_initial_mass.get()),
+                                           time=float(self.stage1_time.get()))
         if self.number_of_steps.get() == 2:
-            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(),
-                                           consumption=self.stage1_consumption_entry.get(),
-                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
-                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
-            self.calculator.add_data_stage(diameter=self.stage2_diameter_entry.get(), consumption=self.stage2_consumption.get(),
-                                           final_mass=self.stage2_final_mass.get(), force=self.stage2_force_entry.get(),
-                                           initial_mass=self.stage2_initial_mass.get(), time=self.stage2_time)
+            self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
+                                           consumption=float(self.stage1_consumption_entry.get()),
+                                           final_mass=float(self.stage1_final_mass.get()),
+                                           force=float(self.stage1_force_entry.get()),
+                                           initial_mass=float(self.stage1_initial_mass.get()),
+                                           time=float(self.stage1_time.get()))
+            self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
+                                           consumption=float(self.stage2_consumption.get()),
+                                           final_mass=float(self.stage2_final_mass.get()),
+                                           force=float(self.stage2_force_entry.get()),
+                                           initial_mass=float(self.stage2_initial_mass.get()),
+                                           time=float(self.stage2_time.get()))
         if self.number_of_steps.get() == 3:
-            self.calculator.add_data_stage(diameter=self.stage1_diameter_entry.get(),
-                                           consumption=self.stage1_consumption_entry.get(),
-                                           final_mass=self.stage1_final_mass.get(), force=self.stage1_force_entry.get(),
-                                           initial_mass=self.stage1_initial_mass.get(), time=self.stage1_time)
-            self.calculator.add_data_stage(diameter=self.stage2_diameter_entry.get(),
-                                           consumption=self.stage2_consumption.get(),
-                                           final_mass=self.stage2_final_mass.get(), force=self.stage2_force_entry.get(),
-                                           initial_mass=self.stage2_initial_mass.get(), time=self.stage2_time)
-            self.calculator.add_data_stage(diameter=self.stage3_diameter_entry.get(), consumption=self.stage3_consumption.get(),
-                                           final_mass=self.stage3_final_mass.get(), force=self.stage3_force_entry.get(),
-                                           initial_mass=self.stage3_initial_mass.get(), time=self.stage3_time)
-        self.calculator.add_data_parachute(time=self.parachute_time_entry.get(), check_parachute=self.number_of_steps.get(),
-                                           diameter=self.parachute_diameter_entry.get())
+            self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
+                                           consumption=float(self.stage1_consumption_entry.get()),
+                                           final_mass=float(self.stage1_final_mass.get()),
+                                           force=float(self.stage1_force_entry.get()),
+                                           initial_mass=float(self.stage1_initial_mass.get()),
+                                           time=float(self.stage1_time.get()))
+            self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
+                                           consumption=float(self.stage2_consumption.get()),
+                                           final_mass=float(self.stage2_final_mass.get()),
+                                           force=float(self.stage2_force_entry.get()),
+                                           initial_mass=float(self.stage2_initial_mass.get()),
+                                           time=float(self.stage2_time.get()))
+            self.calculator.add_data_stage(diameter=float(self.stage3_diameter_entry.get()),
+                                           consumption=float(self.stage3_consumption.get()),
+                                           final_mass=float(self.stage3_final_mass.get()),
+                                           force=float(self.stage3_force_entry.get()),
+                                           initial_mass=float(self.stage3_initial_mass.get()),
+                                           time=float(self.stage3_time.get()))
+        self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
+                                           check_parachute=float(self.number_of_steps.get()),
+                                           diameter=float(self.parachute_diameter_entry.get()))
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
