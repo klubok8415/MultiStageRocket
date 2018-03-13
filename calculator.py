@@ -3,12 +3,12 @@ from calculation_exceptions import OverSpeedError
 
 
 class Calculator:
-    def __init__(self, stages):
+    def __init__(self):
         self.parachute_data = {}
         self.stages_data = []
-        self.speed_list = {}
+        self.velocity_list = {}
         self.height_list = {}
-        self.stage_counter = stages
+        self.stages_counter = 0
         self.current_stage = 0
         self.cx_list = [0.775084047,
                         0.607780256,
@@ -119,6 +119,7 @@ class Calculator:
         diameter = self.stages_data[self.current_stage - 1]['diameter']
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
+
         if self.parachute_data['check_parachute'] == self.current_stage:
             time = self.parachute_data['time_parachute']
         else:
@@ -154,7 +155,7 @@ class Calculator:
                     speed_for_cx += 0.1
                 current_resistance = self.cx_dictionary[round(speed_for_cx, 1)]
 
-            self.speed_list[round(current_time + t, 3)] = current_speed
+            self.velocity_list[round(current_time + t, 3)] = current_speed
             self.height_list[round(current_time + t, 3)] = current_height
 
             if t >= (initial_mass - final_mass) / consumption:
@@ -174,14 +175,14 @@ class Calculator:
 
             if current_height < 0:
                 print('Falcon has landed with landing velocity {} m/s'.format(
-                    round(abs(self.speed_list[round(t - delta_t, 2)]), 2)))
+                    round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
                 return
 
         if self.parachute_data['check_parachute'] == self.current_stage:
             t = 0
             while current_height >= 0:
                 current_density = density * 10 ** (-b * current_height)
-                self.speed_list[round(current_time + t, 3)] = current_speed
+                self.velocity_list[round(current_time + t, 3)] = current_speed
                 self.height_list[round(current_time + t, 3)] = current_height
                 area = pi * (self.parachute_data['parachute_diameter'] / 2) ** 2
                 current_speed = current_speed + \
@@ -190,13 +191,13 @@ class Calculator:
                                  - current_mass * gravity) \
                                 * delta_t / current_mass
 
-                current_height = current_height + current_speed * delta_t
+                current_height = current_height + current_speed * delta_t22
 
         current_time += time
-        self.stage_counter -= 1
+        self.stages_counter -= 1
         self.current_stage += 1
 
-        if self.stage_counter > 0:
+        if self.stages_counter > 0:
             self.count()
 
     def add_data_stage(self, **kwargs):
@@ -225,4 +226,4 @@ if __name__ == '__main__':
         if round(key, 1) == key:
             print('{0}sec : {1}m'.format(key, value))
     print(max(calculator.height_list.values()))
-    print(max(calculator.speed_list.values()))
+    print(max(calculator.velocity_list.values()))

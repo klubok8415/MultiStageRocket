@@ -187,6 +187,7 @@ class CustomCanvas(Canvas):
     def add_function_data(self, data):
         for argument, value in data.items():
             self.function_data[argument] = value
+        self.update_graph()
 
     def delete_function(self, index):
         self.functions_list.pop(index)

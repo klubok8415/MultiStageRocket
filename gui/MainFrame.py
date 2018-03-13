@@ -8,7 +8,7 @@ class MainFrame(Frame):
     def __init__(self):
         self.root = Tk()
         super(MainFrame, self).__init__(self.root)
-        self.calculator = Calculator(stages=3)
+        self.calculator = Calculator()
 
         self.stages_frame = Frame(self.root)
         self.stages_frame.pack(fill=X, expand=1)
@@ -34,8 +34,9 @@ class MainFrame(Frame):
         self.parachute_time_entry = EntryWithBackgroundText(self.general_data_frame, background_text='sec')
         self.parachute_time_entry.grid(row=2, column=1)
 
-        self.stages_counter = IntVar(self.root)
-        self.number_of_steps = Label(self.general_data_frame, text='number of steps')
+        self.stages_counter_label = Label(self.general_data_frame, text='number of stages')
+        self.stages_counter_label.grid(row=3, columnspan=2)
+        self.stages_counter = IntVar(self.root, value=1)
         self.one_stage_button = Radiobutton(self.general_data_frame,
                                             text='1',
                                             variable=self.stages_counter,
@@ -55,9 +56,6 @@ class MainFrame(Frame):
                                                command=self.change_stage_number)
 
         self.three_stages_button.grid(row=6, columnspan=2)
-        self.number_of_steps.grid(row=3, column=0)
-        self.number_of_steps = EntryWithBackgroundText(self.general_data_frame, background_text='pcs')
-        self.number_of_steps.grid(row=3, column=1)
 
         self.stage1_frame = Frame(self.stages_frame, padx=25)
         self.stage1_frame.pack(side=LEFT, fill=X, expand=1)
@@ -78,16 +76,16 @@ class MainFrame(Frame):
         self.stage1_consumption_entry.grid(row=3, column=1)
         self.stage1_time_label = Label(self.stage1_frame, text='time')
         self.stage1_time_label.grid(row=4, column=0)
-        self.stage1_time = EntryWithBackgroundText(self.stage1_frame, background_text='sec')
-        self.stage1_time.grid(row=4, column=1)
+        self.stage1_time_entry = EntryWithBackgroundText(self.stage1_frame, background_text='sec')
+        self.stage1_time_entry.grid(row=4, column=1)
         self.stage1_initial_mass_label = Label(self.stage1_frame, text='initial_mass')
         self.stage1_initial_mass_label.grid(row=5, column=0)
-        self.stage1_initial_mass = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
-        self.stage1_initial_mass.grid(row=5, column=1)
+        self.stage1_initial_mass_entry = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
+        self.stage1_initial_mass_entry.grid(row=5, column=1)
         self.stage1_final_mass_label = Label(self.stage1_frame, text='final_mass')
         self.stage1_final_mass_label.grid(row=6, column=0)
-        self.stage1_final_mass = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
-        self.stage1_final_mass.grid(row=6, column=1)
+        self.stage1_final_mass_entry = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
+        self.stage1_final_mass_entry.grid(row=6, column=1)
 
         self.stage2_frame = Frame(self.stages_frame, padx=25)
         self.stage2_frame.pack(side=LEFT, fill=X, expand=1)
@@ -157,37 +155,51 @@ class MainFrame(Frame):
         self.size_x_prev = self.root.winfo_width()
         self.size_y_prev = self.root.winfo_height()
         self.root.bind('<Configure>', self.root_resize)
+        self.root.bind('<Return>', self.on_click_count)
 
-    def on_click(self):
-        if self.number_of_steps.get() == 0:
-            pass
-        if self.number_of_steps.get() == 1:
+        # values for testing
+        self.stage1_diameter_entry.change_enter(1)
+        self.stage1_force_entry.change_enter(1)
+        self.stage1_consumption_entry.change_enter(1)
+        self.stage1_time_entry.change_enter(1)
+        self.stage1_initial_mass_entry.change_enter(1)
+        self.stage1_final_mass_entry.change_enter(1)
+
+        self.stage1_diameter_entry.insert(0, '0.05')
+        self.stage1_force_entry.insert(0, '200')
+        self.stage1_consumption_entry.insert(0, '1')
+        self.stage1_time_entry.insert(0, '100')
+        self.stage1_initial_mass_entry.insert(0, '2')
+        self.stage1_final_mass_entry.insert(0, '1')
+
+    def on_click_count(self, event):
+        if self.stages_counter.get() == 1:
             self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                            consumption=float(self.stage1_consumption_entry.get()),
-                                           final_mass=float(self.stage1_final_mass.get()),
+                                           final_mass=float(self.stage1_final_mass_entry.get()),
                                            force=float(self.stage1_force_entry.get()),
-                                           initial_mass=float(self.stage1_initial_mass.get()),
-                                           time=float(self.stage1_time.get()))
-        if self.number_of_steps.get() == 2:
+                                           initial_mass=float(self.stage1_initial_mass_entry.get()),
+                                           time=float(self.stage1_time_entry.get()))
+        if self.stages_counter.get() == 2:
             self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                            consumption=float(self.stage1_consumption_entry.get()),
-                                           final_mass=float(self.stage1_final_mass.get()),
+                                           final_mass=float(self.stage1_final_mass_entry.get()),
                                            force=float(self.stage1_force_entry.get()),
-                                           initial_mass=float(self.stage1_initial_mass.get()),
-                                           time=float(self.stage1_time.get()))
+                                           initial_mass=float(self.stage1_initial_mass_entry.get()),
+                                           time=float(self.stage1_time_entry.get()))
             self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
                                            consumption=float(self.stage2_consumption.get()),
                                            final_mass=float(self.stage2_final_mass.get()),
                                            force=float(self.stage2_force_entry.get()),
                                            initial_mass=float(self.stage2_initial_mass.get()),
                                            time=float(self.stage2_time.get()))
-        if self.number_of_steps.get() == 3:
+        if self.stages_counter.get() == 3:
             self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                            consumption=float(self.stage1_consumption_entry.get()),
-                                           final_mass=float(self.stage1_final_mass.get()),
+                                           final_mass=float(self.stage1_final_mass_entry.get()),
                                            force=float(self.stage1_force_entry.get()),
-                                           initial_mass=float(self.stage1_initial_mass.get()),
-                                           time=float(self.stage1_time.get()))
+                                           initial_mass=float(self.stage1_initial_mass_entry.get()),
+                                           time=float(self.stage1_time_entry.get()))
             self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
                                            consumption=float(self.stage2_consumption.get()),
                                            final_mass=float(self.stage2_final_mass.get()),
@@ -200,9 +212,14 @@ class MainFrame(Frame):
                                            force=float(self.stage3_force_entry.get()),
                                            initial_mass=float(self.stage3_initial_mass.get()),
                                            time=float(self.stage3_time.get()))
-        self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
-                                           check_parachute=float(self.number_of_steps.get()),
-                                           diameter=float(self.parachute_diameter_entry.get()))
+        if False:
+            self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
+                                               check_parachute=False,
+                                               diameter=float(self.parachute_diameter_entry.get()))
+        self.calculator.stages_counter = self.stages_counter.get()
+        self.calculator.count()
+        self.velocity_by_time_displayer.add_function_data(self.calculator.velocity_list)
+        self.height_by_time_displayer.add_function_data(self.calculator.height_list)
 
     def change_stage_number(self):
         pass
@@ -222,9 +239,8 @@ class MainFrame(Frame):
                 self.size_y_prev += delta_y
 
     def start(self):
-        for displayer in self.displayers_list:
-            displayer.add_function_data()
-            displayer.update_graph()
+        self.height_by_time_displayer.update_graph()
+        self.velocity_by_time_displayer.update_graph()
         self.root.mainloop()
 
 
