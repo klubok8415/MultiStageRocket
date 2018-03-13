@@ -5,7 +5,7 @@ import platform
 
 class CustomCanvas(Canvas):
     def __init__(self, root, title='Title', x_axis_name='X', y_axis_name='Y',
-                 x_min=-250, x_max=250, y_min=-250, y_max=250, size_x=250, size_y=250, border=50):
+                 x_min=-5, x_max=50, y_min=-5, y_max=1000, size_x=250, size_y=250, border=50):
         self.motion = False
         self.root = root
         self.size_x = size_x
@@ -166,7 +166,7 @@ class CustomCanvas(Canvas):
                              text=str(a / (10 ** n)), fill='black',
                              font=('Helvectica', '10'))
 
-        self.create_text(-15 + y_axis_position, self.border // 2 + 10,
+        self.create_text(-6 + y_axis_position, self.border // 2 + 10,
                          text=self.y_axis_name, fill='black',
                          font=('Helvetica', 15))
         self.create_text(self.size_x, -15 + x_axis_position,
