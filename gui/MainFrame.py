@@ -32,7 +32,28 @@ class MainFrame(Frame):
         self.parachute_time_label.grid(row=2, column=0)
         self.parachute_time_entry = EntryWithBackgroundText(self.general_data_frame, background_text='sec')
         self.parachute_time_entry.grid(row=2, column=1)
+
+        self.stages_counter = IntVar(self.root)
         self.number_of_steps = Label(self.general_data_frame, text='number of steps')
+        self.one_stage_button = Radiobutton(self.general_data_frame,
+                                            text='1',
+                                            variable=self.stages_counter,
+                                            value=1,
+                                            command=self.change_stage_number)
+        self.one_stage_button.grid(row=4, columnspan=2)
+        self.two_stages_button = Radiobutton(self.general_data_frame,
+                                             text='2',
+                                             variable=self.stages_counter,
+                                             value=2,
+                                             command=self.change_stage_number)
+        self.two_stages_button.grid(row=5, columnspan=2)
+        self.three_stages_button = Radiobutton(self.general_data_frame,
+                                               text='3',
+                                               variable=self.stages_counter,
+                                               value=3,
+                                               command=self.change_stage_number)
+
+        self.three_stages_button.grid(row=6, columnspan=2)
         self.number_of_steps.grid(row=3, column=0)
         self.number_of_steps = EntryWithBackgroundText(self.general_data_frame, background_text='pcs')
         self.number_of_steps.grid(row=3, column=1)
@@ -169,6 +190,9 @@ class MainFrame(Frame):
         self.calculator.count(int(self.number_of_steps.get()))
         self.velocity_by_time_displayer.add_function_data(self.calculator.speed_list)
         self.height_by_time_displayer.add_function_data(self.calculator.height_list)
+
+    def change_stage_number(self):
+        pass
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
