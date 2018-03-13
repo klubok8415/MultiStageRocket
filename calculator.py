@@ -120,7 +120,7 @@ class Calculator:
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
 
-        if self.parachute_data['check_parachute'] == self.current_stage:
+        if self.parachute_data['pcs_stages'] == self.current_stage:
             time = self.parachute_data['time_parachute']
         else:
             time = self.stages_data[self.current_stage - 1]['time']
@@ -178,7 +178,7 @@ class Calculator:
                     round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
                 return
 
-        if self.parachute_data['check_parachute'] == self.current_stage:
+        if self.parachute_data['pcs_stages'] == self.current_stage:
             t = 0
             while current_height >= 0:
                 current_density = density * 10 ** (-b * current_height)
