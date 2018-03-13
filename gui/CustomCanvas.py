@@ -184,10 +184,9 @@ class CustomCanvas(Canvas):
             self.size_y * y - 1,
             fill=color)
 
-    def add_function_data(self):
-        for x in range(-100, 100):
-            self.function_data[x] = x
-
+    def add_function_data(self, data):
+        for argument, value in data.items():
+            self.function_data[argument] = value
 
     def delete_function(self, index):
         self.functions_list.pop(index)
