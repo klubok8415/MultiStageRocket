@@ -220,6 +220,10 @@ if __name__ == '__main__':
         final_mass=1,
 
     )
+    calculator.add_data_parachute(time=15,
+                                               check_parachute=False,
+                                               diameter=1,
+                                               pcs_stages=1)
 
     calculator.count()
     for key, value in calculator.height_list.items():
