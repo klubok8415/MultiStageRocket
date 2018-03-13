@@ -15,9 +15,15 @@ class MainFrame(Frame):
         self.displayer_frame = Frame(self.root, pady=20)
         self.displayer_frame.pack()
 
-        self.velocity_by_time_displayer = CustomCanvas(self.displayer_frame)
+        self.velocity_by_time_displayer = CustomCanvas(self.displayer_frame,
+                                                       title='V(t)',
+                                                       y_axis_name='V\n(m/s)',
+                                                       x_axis_name='t(s)')
         self.velocity_by_time_displayer.grid(row=0)
-        self.height_by_time_displayer = CustomCanvas(self.displayer_frame)
+        self.height_by_time_displayer = CustomCanvas(self.displayer_frame,
+                                                     title='H(t)',
+                                                     y_axis_name='H\n(m)',
+                                                     x_axis_name='t(s)')
         self.height_by_time_displayer.grid(row=0, column=1)
 
         self.general_data_frame = Frame(self.stages_frame, padx=25)
@@ -78,14 +84,23 @@ class MainFrame(Frame):
         self.stage1_time_label.grid(row=4, column=0)
         self.stage1_time_entry = EntryWithBackgroundText(self.stage1_frame, background_text='sec')
         self.stage1_time_entry.grid(row=4, column=1)
-        self.stage1_initial_mass_label = Label(self.stage1_frame, text='initial_mass')
+        self.stage1_initial_mass_label = Label(self.stage1_frame, text='initial mass')
         self.stage1_initial_mass_label.grid(row=5, column=0)
         self.stage1_initial_mass_entry = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
         self.stage1_initial_mass_entry.grid(row=5, column=1)
-        self.stage1_final_mass_label = Label(self.stage1_frame, text='final_mass')
+        self.stage1_final_mass_label = Label(self.stage1_frame, text='final mass')
         self.stage1_final_mass_label.grid(row=6, column=0)
         self.stage1_final_mass_entry = EntryWithBackgroundText(self.stage1_frame, background_text='kg')
         self.stage1_final_mass_entry.grid(row=6, column=1)
+
+        self.stage1_property = [
+                                self.stage1_diameter_entry,
+                                self.stage1_force_entry,
+                                self.stage1_consumption_entry,
+                                self.stage1_time_entry,
+                                self.stage1_initial_mass_entry,
+                                self.stage1_final_mass_entry
+        ]
 
         self.stage2_frame = Frame(self.stages_frame, padx=25)
         self.stage2_frame.pack(side=LEFT, fill=X, expand=1)
@@ -102,20 +117,29 @@ class MainFrame(Frame):
         self.stage2_force_entry.grid(row=2, column=1)
         self.stage2_consumption_label = Label(self.stage2_frame, text='consumption')
         self.stage2_consumption_label.grid(row=3, column=0)
-        self.stage2_consumption = EntryWithBackgroundText(self.stage2_frame, background_text='kg/sec')
-        self.stage2_consumption.grid(row=3, column=1)
+        self.stage2_consumption_entry = EntryWithBackgroundText(self.stage2_frame, background_text='kg/sec')
+        self.stage2_consumption_entry.grid(row=3, column=1)
         self.stage2_time_label = Label(self.stage2_frame, text='time')
         self.stage2_time_label.grid(row=4, column=0)
-        self.stage2_time = EntryWithBackgroundText(self.stage2_frame, background_text='sec')
-        self.stage2_time.grid(row=4, column=1)
-        self.stage2_initial_mass_label = Label(self.stage2_frame, text='initial_mass')
+        self.stage2_time_entry = EntryWithBackgroundText(self.stage2_frame, background_text='sec')
+        self.stage2_time_entry.grid(row=4, column=1)
+        self.stage2_initial_mass_label = Label(self.stage2_frame, text='initial mass')
         self.stage2_initial_mass_label.grid(row=5, column=0)
-        self.stage2_initial_mass = EntryWithBackgroundText(self.stage2_frame, background_text='kg')
-        self.stage2_initial_mass.grid(row=5, column=1)
-        self.stage2_final_mass_label = Label(self.stage2_frame, text='final_mass')
+        self.stage2_initial_mass_entry = EntryWithBackgroundText(self.stage2_frame, background_text='kg')
+        self.stage2_initial_mass_entry.grid(row=5, column=1)
+        self.stage2_final_mass_label = Label(self.stage2_frame, text='final mass')
         self.stage2_final_mass_label.grid(row=6, column=0)
-        self.stage2_final_mass = EntryWithBackgroundText(self.stage2_frame, background_text='kg')
-        self.stage2_final_mass.grid(row=6, column=1)
+        self.stage2_final_mass_entry = EntryWithBackgroundText(self.stage2_frame, background_text='kg')
+        self.stage2_final_mass_entry.grid(row=6, column=1)
+
+        self.stage2_property = [
+            self.stage2_diameter_entry,
+            self.stage2_force_entry,
+            self.stage2_consumption_entry,
+            self.stage2_time_entry,
+            self.stage2_initial_mass_entry,
+            self.stage2_final_mass_entry
+        ]
 
         self.stage3_frame = Frame(self.stages_frame, padx=25)
         self.stage3_frame.pack(side=LEFT, fill=X, expand=1)
@@ -132,20 +156,29 @@ class MainFrame(Frame):
         self.stage3_force_entry.grid(row=2, column=1)
         self.stage3_consumption_label = Label(self.stage3_frame, text='consumption')
         self.stage3_consumption_label.grid(row=3, column=0)
-        self.stage3_consumption = EntryWithBackgroundText(self.stage3_frame, background_text='kg/sec')
-        self.stage3_consumption.grid(row=3, column=1)
+        self.stage3_consumption_entry = EntryWithBackgroundText(self.stage3_frame, background_text='kg/sec')
+        self.stage3_consumption_entry.grid(row=3, column=1)
         self.stage3_time_label = Label(self.stage3_frame, text='time')
         self.stage3_time_label.grid(row=4, column=0)
-        self.stage3_time = EntryWithBackgroundText(self.stage3_frame, background_text='sec')
-        self.stage3_time.grid(row=4, column=1)
-        self.stage3_initial_mass_label = Label(self.stage3_frame, text='initial_mass')
+        self.stage3_time_entry = EntryWithBackgroundText(self.stage3_frame, background_text='sec')
+        self.stage3_time_entry.grid(row=4, column=1)
+        self.stage3_initial_mass_label = Label(self.stage3_frame, text='initial mass')
         self.stage3_initial_mass_label.grid(row=5, column=0)
-        self.stage3_initial_mass = EntryWithBackgroundText(self.stage3_frame, background_text='kg')
-        self.stage3_initial_mass.grid(row=5, column=1)
-        self.stage3_final_mass_label = Label(self.stage3_frame, text='final_mass')
+        self.stage3_initial_mass_entry = EntryWithBackgroundText(self.stage3_frame, background_text='kg')
+        self.stage3_initial_mass_entry.grid(row=5, column=1)
+        self.stage3_final_mass_label = Label(self.stage3_frame, text='final mass')
         self.stage3_final_mass_label.grid(row=6, column=0)
-        self.stage3_final_mass = EntryWithBackgroundText(self.stage3_frame, background_text='kg')
-        self.stage3_final_mass.grid(row=6, column=1)
+        self.stage3_final_mass_entry = EntryWithBackgroundText(self.stage3_frame, background_text='kg')
+        self.stage3_final_mass_entry.grid(row=6, column=1)
+
+        self.stage3_property = [
+                                self.stage3_diameter_entry,
+                                self.stage3_force_entry,
+                                self.stage3_consumption_entry,
+                                self.stage3_time_entry,
+                                self.stage3_initial_mass_entry,
+                                self.stage3_final_mass_entry
+        ]
 
         self.displayers_list = [self.velocity_by_time_displayer, self.height_by_time_displayer]
 
@@ -188,11 +221,11 @@ class MainFrame(Frame):
                                            initial_mass=float(self.stage1_initial_mass_entry.get()),
                                            time=float(self.stage1_time_entry.get()))
             self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
-                                           consumption=float(self.stage2_consumption.get()),
-                                           final_mass=float(self.stage2_final_mass.get()),
+                                           consumption=float(self.stage2_consumption_entry.get()),
+                                           final_mass=float(self.stage2_final_mass_entry.get()),
                                            force=float(self.stage2_force_entry.get()),
-                                           initial_mass=float(self.stage2_initial_mass.get()),
-                                           time=float(self.stage2_time.get()))
+                                           initial_mass=float(self.stage2_initial_mass_entry.get()),
+                                           time=float(self.stage2_time_entry.get()))
         if self.stages_counter.get() == 3:
             self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                            consumption=float(self.stage1_consumption_entry.get()),
@@ -201,17 +234,17 @@ class MainFrame(Frame):
                                            initial_mass=float(self.stage1_initial_mass_entry.get()),
                                            time=float(self.stage1_time_entry.get()))
             self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
-                                           consumption=float(self.stage2_consumption.get()),
-                                           final_mass=float(self.stage2_final_mass.get()),
+                                           consumption=float(self.stage2_consumption_entry.get()),
+                                           final_mass=float(self.stage2_final_mass_entry.get()),
                                            force=float(self.stage2_force_entry.get()),
-                                           initial_mass=float(self.stage2_initial_mass.get()),
-                                           time=float(self.stage2_time.get()))
+                                           initial_mass=float(self.stage2_initial_mass_entry.get()),
+                                           time=float(self.stage2_time_entry.get()))
             self.calculator.add_data_stage(diameter=float(self.stage3_diameter_entry.get()),
-                                           consumption=float(self.stage3_consumption.get()),
-                                           final_mass=float(self.stage3_final_mass.get()),
+                                           consumption=float(self.stage3_consumption_entry.get()),
+                                           final_mass=float(self.stage3_final_mass_entry.get()),
                                            force=float(self.stage3_force_entry.get()),
-                                           initial_mass=float(self.stage3_initial_mass.get()),
-                                           time=float(self.stage3_time.get()))
+                                           initial_mass=float(self.stage3_initial_mass_entry.get()),
+                                           time=float(self.stage3_time_entry.get()))
         if False:
             self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
                                                check_parachute=False,
@@ -222,7 +255,38 @@ class MainFrame(Frame):
         self.height_by_time_displayer.add_function_data(self.calculator.height_list)
 
     def change_stage_number(self):
-        pass
+        if self.stages_counter.get() == 1:
+            for entry in self.stage1_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
+            for entry in self.stage2_property:
+                entry.delete(0, 'end')
+                entry.config(state=DISABLED)
+            for entry in self.stage3_property:
+                entry.delete(0, 'end')
+                entry.config(state=DISABLED)
+
+        if self.stages_counter.get() == 2:
+            for entry in self.stage1_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
+            for entry in self.stage2_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
+            for entry in self.stage3_property:
+                entry.delete(0, 'end')
+                entry.config(state=DISABLED)
+
+        if self.stages_counter.get() == 3:
+            for entry in self.stage1_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
+            for entry in self.stage2_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
+            for entry in self.stage3_property:
+                entry.config(state=NORMAL)
+                entry.change_exit(1)
 
     def root_resize(self, event):
         delta_x = (self.root.winfo_width() - self.size_x_prev) / len(self.displayers_list)
@@ -241,6 +305,7 @@ class MainFrame(Frame):
     def start(self):
         self.height_by_time_displayer.update_graph()
         self.velocity_by_time_displayer.update_graph()
+        self.change_stage_number()
         self.root.mainloop()
 
 
