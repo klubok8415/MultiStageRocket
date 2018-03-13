@@ -127,7 +127,7 @@ class MainFrame(Frame):
         self.stage3_final_mass = EntryWithBackgroundText(self.stage3_frame, background_text='kg')
         self.stage3_final_mass.grid(row=6, column=1)
 
-        self.displayers_list = [self.displayer1, self.displayer2]
+        self.displayers_list = [self.velocity_by_time_displayer, self.height_by_time_displayer]
 
         self.root.update()
         self.root.minsize(self.root.winfo_width(), self.root.winfo_height())
