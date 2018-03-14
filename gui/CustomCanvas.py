@@ -185,6 +185,7 @@ class CustomCanvas(Canvas):
             fill=color)
 
     def add_function_data(self, data):
+        self.function_data = {}
         for argument, value in data.items():
             self.function_data[argument] = value
         self.update_graph()
