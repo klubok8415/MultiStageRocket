@@ -271,6 +271,7 @@ class MainFrame(Frame):
             self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
                                                check_parachute=False,
                                                diameter=float(self.parachute_diameter_entry.get()),
+
                                                )
 
         self.calculator.stages_counter = self.stages_counter.get()

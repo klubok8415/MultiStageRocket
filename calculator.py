@@ -8,6 +8,7 @@ class Calculator:
     velocity_list = {}
     height_list = {}
     stages_counter = 0
+
     def __init__(self):
         self.current_stage = 0
         self.cx_list = [0.775084047,
@@ -119,8 +120,6 @@ class Calculator:
         diameter = self.stages_data[self.current_stage - 1]['diameter']
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
-
-        print(self.parachute_data)
         if self.parachute_data['pcs_stages'] == self.current_stage:
             time = self.parachute_data['time_parachute']
         else:
@@ -163,8 +162,7 @@ class Calculator:
                 force = 0
 
             current_speed = current_speed + \
-                            (
-                                        force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                            (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
                             * delta_t / current_mass
 
             if current_speed > 340:
@@ -178,8 +176,8 @@ class Calculator:
                 print('Falcon has landed with landing velocity {} m/s'.format(
                     round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
                 return
-
         if self.parachute_data['pcs_stages'] == self.current_stage:
+            print('xyu')
             t = 0
             while current_height >= 0:
                 current_density = density * 10 ** (-b * current_height)
