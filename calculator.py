@@ -1,5 +1,5 @@
 from math import *
-from calculation_exceptions import OverSpeedError
+from calculator_exceptions import OverSpeedError
 
 
 class Calculator:
@@ -220,7 +220,7 @@ class Calculator:
         self.parachute_data.clear()
         self.parachute_data = kwargs
 
-'''
+
 if __name__ == '__main__':
     calculator = Calculator()
     calculator.add_data_stage(
@@ -244,4 +244,3 @@ if __name__ == '__main__':
             print('{0}sec : {1}m'.format(key, value))
     print(max(calculator.height_list.values()))
     print(max(calculator.velocity_list.values()))
-'''
