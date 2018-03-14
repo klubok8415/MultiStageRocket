@@ -271,12 +271,14 @@ class MainFrame(Frame):
                                            force=float(self.stage3_force_entry.get()),
                                            initial_mass=float(self.stage3_initial_mass_entry.get()),
                                            time=float(self.stage3_time_entry.get()))
-        self.calculator.add_data_parachute(pcs_stages=float(self.stages_counter.get()))
+        self.calculator.add_data_parachute(pcs_stages=float(self.stages_counter.get()),
+                                           check_parachute=self.check_parachute)
+        print(self.check_parachute)
         if self.check_parachute.get():
             self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
-                                               check_parachute=False,
+                                               check_parachute=self.check_parachute,
                                                diameter=float(self.parachute_diameter_entry.get()),
-
+                                               pcs_stages=float(self.stages_counter.get())
                                                )
 
         self.calculator.stages_counter = self.stages_counter.get()

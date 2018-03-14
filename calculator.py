@@ -10,7 +10,7 @@ class Calculator:
     stages_counter = 0
 
     def __init__(self):
-        self.current_stage = 0
+        self.current_stage = 1
         self.cx_list = [0.775084047,
                         0.607780256,
                         0.491020986,
@@ -116,12 +116,13 @@ class Calculator:
         for i in range(101):
             self.cx_dictionary[i * 3.4] = self.cx_list[i]
 
-    def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01):
+    def count(self, density=1.29, b=5.6 * 10 ** -5, gravity=9.81, delta_t=0.01, parachute_resistance=1.1):
+        print(self.current_stage)
         diameter = self.stages_data[self.current_stage - 1]['diameter']
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
-        if self.parachute_data['pcs_stages'] == self.current_stage:
-            time = self.parachute_data['time_parachute']
+        if self.parachute_data['pcs_stages'] == self.current_stage and self.parachute_data['check_parachute'] == True:
+            time = self.parachute_data['time']
         else:
             time = self.stages_data[self.current_stage - 1]['time']
         initial_mass = self.stages_data[self.current_stage - 1]['initial_mass']
@@ -160,15 +161,40 @@ class Calculator:
 
             if t >= (initial_mass - final_mass) / consumption:
                 force = 0
+            print(self.parachute_data['check_parachute'])
+            if self.parachute_data['check_parachute']:
+                if int(self.parachute_data['pcs_stages']) == int(self.current_stage) and self.parachute_data['time'] <= t:
+                    print('asd')
+                    current_resistance = parachute_resistance
+                    current_density = density * 10 ** (-b * current_height)
+                    self.velocity_list[round(current_time + t, 3)] = current_speed
+                    self.height_list[round(current_time + t, 3)] = current_height
+                    area = pi * (self.parachute_data['diameter'] / 2) ** 2
+                    current_speed = current_speed + (parachute_resistance * area * current_speed ** 2 * current_density / 2 - current_mass * gravity) * delta_t / current_mass
+                    print(current_speed)
+                    current_height = current_height + current_speed * delta_t
+                    self.velocity_list[round(current_time + t, 3)] = current_speed
+                    self.height_list[round(current_time + t, 3)] = current_height
+                else:
+                    print('vwevwe')
+                    current_speed = current_speed + \
+                                    (
+                                                force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                                    * delta_t / current_mass
 
-            current_speed = current_speed + \
-                            (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
-                            * delta_t / current_mass
+                    if current_speed > 340:
+                        raise OverSpeedError('Speed limit reached')
 
-            if current_speed > 340:
-                 raise OverSpeedError('Speed limit reached')
+                    current_height = current_height + current_speed * delta_t
+            else:
+                print('vervr')
+                current_speed = current_speed + \
+                                (force - current_mass * gravity - current_resistance * area * current_speed ** 2 * current_density / 2) \
+                                * delta_t / current_mass
+                if current_speed > 340:
+                    raise OverSpeedError('Speed limit reached')
 
-            current_height = current_height + current_speed * delta_t
+                current_height = current_height + current_speed * delta_t
 
             t += delta_t
 
@@ -176,21 +202,6 @@ class Calculator:
                 # print('Falcon has landed with landing velocity {} m/s'.format(
                 #     round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
                 return
-        if self.parachute_data['pcs_stages'] == self.current_stage:
-            print('xyu')
-            t = 0
-            while current_height >= 0:
-                current_density = density * 10 ** (-b * current_height)
-                self.velocity_list[round(current_time + t, 3)] = current_speed
-                self.height_list[round(current_time + t, 3)] = current_height
-                area = pi * (self.parachute_data['parachute_diameter'] / 2) ** 2
-                current_speed = current_speed + \
-                                (self.parachute_data[
-                                     'parachute_resistance'] * area * current_speed ** 2 * current_density / 2
-                                 - current_mass * gravity) \
-                                * delta_t / current_mass
-
-                current_height = current_height + current_speed * delta_t
 
         current_time += time
         self.stages_counter -= 1
