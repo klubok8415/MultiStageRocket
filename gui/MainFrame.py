@@ -1,7 +1,9 @@
 from tkinter import *
+from tkinter.messagebox import *
 from gui.CustomCanvas import CustomCanvas
 from gui.EntryWithBackgroundText import EntryWithBackgroundText
 from calculator import Calculator
+from calculation_exceptions import OverSpeedError
 
 
 class MainFrame(Frame):
@@ -50,7 +52,10 @@ class MainFrame(Frame):
         self.check_parachute = BooleanVar(self.root, value=0)
         self.general_data_title = Label(self.general_data_frame, text='general data')
         self.general_data_title.grid(row=0, columnspan=2)
-        self.parachute_checkbox = Checkbutton(self.general_data_frame, text='parachute', variable=self.check_parachute, command=self.on_checkbox_check_parachute)
+        self.parachute_checkbox = Checkbutton(self.general_data_frame,
+                                              text='parachute',
+                                              variable=self.check_parachute,
+                                              command=self.on_checkbox_check_parachute)
         self.parachute_checkbox.grid(row=1, columnspan=2)
         self.parachute_diameter_label = Label(self.general_data_frame, text='parachute diameter')
         self.parachute_diameter_label.grid(row=2, column=0)
@@ -273,12 +278,16 @@ class MainFrame(Frame):
                                                pcs_stages=float(self.stages_counter.get()))
 
         self.calculator.stages_counter = self.stages_counter.get()
-        self.calculator.count()
+        try:
+            self.calculator.count()
+        except OverSpeedError:
+            showerror(title='OverSpeedError', message='Rocket went supersonic \nfurther calculations are ineffectual')
+            return
         self.velocity_by_time_displayer.add_function_data(self.calculator.velocity_list)
         self.height_by_time_displayer.add_function_data(self.calculator.height_list)
-        self.results_max_height_2['text'] = round(float(max(Calculator.height_list.values())), 2)
-        self.results_max_speed_2['text'] = round(float(max(Calculator.velocity_list.values())), 2)
-        self.results_time['text'] = round(float(max(Calculator.velocity_list.keys())), 2)
+        self.results_max_height_2['text'] = str(round(float(max(Calculator.height_list.values())), 2)) + ' m'
+        self.results_max_speed_2['text'] = str(round(float(max(Calculator.velocity_list.values())), 2)) + ' m/s'
+        self.results_time['text'] = str(round(float(max(Calculator.velocity_list.keys())), 2)) + ' s'
 
     def change_stage_number(self):
         if self.stages_counter.get() == 1:
