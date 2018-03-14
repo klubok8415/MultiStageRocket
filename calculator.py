@@ -166,15 +166,15 @@ class Calculator:
                             * delta_t / current_mass
 
             if current_speed > 340:
-                raise OverSpeedError('Speed limit reached')
+                 raise OverSpeedError('Speed limit reached')
 
             current_height = current_height + current_speed * delta_t
 
             t += delta_t
 
             if current_height < 0:
-                print('Falcon has landed with landing velocity {} m/s'.format(
-                    round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
+                # print('Falcon has landed with landing velocity {} m/s'.format(
+                #     round(abs(self.velocity_list[round(t - delta_t, 2)]), 2)))
                 return
         if self.parachute_data['pcs_stages'] == self.current_stage:
             print('xyu')
