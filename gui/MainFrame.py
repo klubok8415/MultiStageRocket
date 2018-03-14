@@ -26,6 +26,24 @@ class MainFrame(Frame):
                                                      x_axis_name='t(s)')
         self.height_by_time_displayer.grid(row=0, column=1)
 
+        self.results_frame = Frame(self.displayer_frame, padx=50)
+        self.results_title = Label(self.results_frame, text='Results')
+        self.results_title.grid(row=0, column=0)
+        self.results_max_height_1 = Label(self.results_frame, text='maximum height')
+        self.results_max_height_1.grid(row=1, column=0)
+        self.results_max_height_2 = Label(self.results_frame, text='')
+        self.results_max_height_2.grid(row=1, column=1)
+        self.results_max_speed_1 = Label(self.results_frame, text='maximum speed')
+        self.results_max_speed_1.grid(row=2, column=0)
+        self.results_max_speed_2 = Label(self.results_frame, text='')
+        self.results_max_speed_2.grid(row=2, column=1)
+        self.results_time = Label(self.results_title, text='flight time')
+        self.results_time.grid(row=3, column=0)
+        self.results_time = Label(self.results_title, text='')
+        self.results_time.grid(row=3, column=1)
+
+        self.results_frame.grid(row=0, column=2)
+
         self.general_data_frame = Frame(self.stages_frame, padx=25)
         self.general_data_frame.pack(side=LEFT, fill=X, expand=1)
 
@@ -248,7 +266,7 @@ class MainFrame(Frame):
                                            force=float(self.stage3_force_entry.get()),
                                            initial_mass=float(self.stage3_initial_mass_entry.get()),
                                            time=float(self.stage3_time_entry.get()))
-        if False:
+        if self.check_parachute.get():
             self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
                                                check_parachute=False,
                                                diameter=float(self.parachute_diameter_entry.get()),
@@ -258,6 +276,9 @@ class MainFrame(Frame):
         self.calculator.count()
         self.velocity_by_time_displayer.add_function_data(self.calculator.velocity_list)
         self.height_by_time_displayer.add_function_data(self.calculator.height_list)
+        self.results_max_height_2['text'] = round(float(max(Calculator.height_list.values())), 2)
+        self.results_max_speed_2['text'] = round(float(max(Calculator.velocity_list.values())), 2)
+        self.results_time['text'] = round(float(max(Calculator.velocity_list.keys())), 2)
 
     def change_stage_number(self):
         if self.stages_counter.get() == 1:

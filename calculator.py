@@ -3,12 +3,12 @@ from calculation_exceptions import OverSpeedError
 
 
 class Calculator:
+    parachute_data = {}
+    stages_data = []
+    velocity_list = {}
+    height_list = {}
+    stages_counter = 0
     def __init__(self):
-        self.parachute_data = {}
-        self.stages_data = []
-        self.velocity_list = {}
-        self.height_list = {}
-        self.stages_counter = 0
         self.current_stage = 0
         self.cx_list = [0.775084047,
                         0.607780256,
@@ -119,7 +119,7 @@ class Calculator:
         diameter = self.stages_data[self.current_stage - 1]['diameter']
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
-
+        print(self.parachute_data)
         if self.parachute_data['pcs_stages'] == self.current_stage:
             time = self.parachute_data['time_parachute']
         else:
@@ -201,6 +201,8 @@ class Calculator:
             self.count()
 
     def add_data_stage(self, **kwargs):
+        self.height_list.clear()
+        self.stages_counter = 0
         self.stages_data.clear()
         self.stages_data.append(kwargs)
 
@@ -208,7 +210,7 @@ class Calculator:
         self.parachute_data.clear()
         self.parachute_data = kwargs
 
-
+'''
 if __name__ == '__main__':
     calculator = Calculator()
     calculator.add_data_stage(
@@ -221,9 +223,10 @@ if __name__ == '__main__':
 
     )
     calculator.add_data_parachute(time=15,
-                                               check_parachute=False,
-                                               diameter=1,
-                                               pcs_stages=1)
+                                  check_parachute=False,
+                                  diameter=1,
+                                  pcs_stages=1
+                                  )
 
     calculator.count()
     for key, value in calculator.height_list.items():
@@ -231,3 +234,4 @@ if __name__ == '__main__':
             print('{0}sec : {1}m'.format(key, value))
     print(max(calculator.height_list.values()))
     print(max(calculator.velocity_list.values()))
+'''
