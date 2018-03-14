@@ -119,6 +119,7 @@ class Calculator:
         diameter = self.stages_data[self.current_stage - 1]['diameter']
         force = self.stages_data[self.current_stage - 1]['force']
         consumption = self.stages_data[self.current_stage - 1]['consumption']
+
         print(self.parachute_data)
         if self.parachute_data['pcs_stages'] == self.current_stage:
             time = self.parachute_data['time_parachute']
