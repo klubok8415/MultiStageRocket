@@ -30,7 +30,7 @@ class MainFrame(Frame):
 
         self.results_frame = Frame(self.displayer_frame, padx=50)
         self.results_title = Label(self.results_frame, text='Results')
-        self.results_title.grid(row=0, column=0)
+        self.results_title.grid(row=0, column=0, columnspan=2)
         self.results_max_height_1 = Label(self.results_frame, text='maximum height')
         self.results_max_height_1.grid(row=1, column=0)
         self.results_max_height_2 = Label(self.results_frame, text='', width=20)
@@ -279,6 +279,8 @@ class MainFrame(Frame):
         except ValueError:
             showerror(title='Input error',
                       message='Unable to count due to incorrect input format \nCheck all active entries')
+            return
+
 
         if self.check_parachute.get():
             try:
@@ -290,6 +292,7 @@ class MainFrame(Frame):
             except ValueError:
                 showerror(title='Input error',
                           message='Incorrect input, check parachute data')
+                return
 
         self.calculator.stages_counter = self.stages_counter.get()
         try:
