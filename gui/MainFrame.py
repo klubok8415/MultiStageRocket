@@ -39,10 +39,14 @@ class MainFrame(Frame):
         self.results_max_speed_1.grid(row=2, column=0)
         self.results_max_speed_2 = Label(self.results_frame, text='', width=20)
         self.results_max_speed_2.grid(row=2, column=1)
-        self.results_time = Label(self.results_title, text='flight time')
-        self.results_time.grid(row=3, column=0)
-        self.results_time = Label(self.results_title, text='', width=20)
-        self.results_time.grid(row=3, column=1)
+        self.results_landing_velocity_label = Label(self.results_frame, text='landing velocity')
+        self.results_landing_velocity = Label(self.results_frame, width=20)
+        self.results_landing_velocity_label.grid(row=3, column=0)
+        self.results_landing_velocity.grid(row=3, column=1)
+        self.results_time = Label(self.results_frame, text='flight time')
+        self.results_time.grid(row=4, column=0)
+        self.results_time = Label(self.results_frame, text='', width=20)
+        self.results_time.grid(row=4, column=1)
 
         self.results_frame.grid(row=0, column=2)
 
@@ -235,44 +239,53 @@ class MainFrame(Frame):
         self.calculator = Calculator()
         try:
             if self.stages_counter.get() == 1:
+                if float(self.parachute_time_entry.get()) < 10:
+                    showerror(title='Incorrect input', message='Parachute runs before the fall starts')
+                    return
                 self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                                consumption=float(self.stage1_consumption_entry.get()),
                                                final_mass=float(self.stage1_final_mass_entry.get()),
                                                force=float(self.stage1_force_entry.get()),
                                                initial_mass=float(self.stage1_initial_mass_entry.get()),
-                                               time=float(self.stage1_time_entry.get()))
+                                               time=float(self.stage1_time_entry.get()),
+                                               stage_num=1)
             if self.stages_counter.get() == 2:
                 self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                                consumption=float(self.stage1_consumption_entry.get()),
                                                final_mass=float(self.stage1_final_mass_entry.get()),
                                                force=float(self.stage1_force_entry.get()),
                                                initial_mass=float(self.stage1_initial_mass_entry.get()),
-                                               time=float(self.stage1_time_entry.get()))
+                                               time=float(self.stage1_time_entry.get()),
+                                               stage_num=1)
                 self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
                                                consumption=float(self.stage2_consumption_entry.get()),
                                                final_mass=float(self.stage2_final_mass_entry.get()),
                                                force=float(self.stage2_force_entry.get()),
                                                initial_mass=float(self.stage2_initial_mass_entry.get()),
-                                               time=float(self.stage2_time_entry.get()))
+                                               time=float(self.stage2_time_entry.get()),
+                                               stage_num=2)
             if self.stages_counter.get() == 3:
                 self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                                consumption=float(self.stage1_consumption_entry.get()),
                                                final_mass=float(self.stage1_final_mass_entry.get()),
                                                force=float(self.stage1_force_entry.get()),
                                                initial_mass=float(self.stage1_initial_mass_entry.get()),
-                                               time=float(self.stage1_time_entry.get()))
+                                               time=float(self.stage1_time_entry.get()),
+                                               stage_num=1)
                 self.calculator.add_data_stage(diameter=float(self.stage2_diameter_entry.get()),
                                                consumption=float(self.stage2_consumption_entry.get()),
                                                final_mass=float(self.stage2_final_mass_entry.get()),
                                                force=float(self.stage2_force_entry.get()),
                                                initial_mass=float(self.stage2_initial_mass_entry.get()),
-                                               time=float(self.stage2_time_entry.get()))
+                                               time=float(self.stage2_time_entry.get()),
+                                               stage_num=2)
                 self.calculator.add_data_stage(diameter=float(self.stage3_diameter_entry.get()),
                                                consumption=float(self.stage3_consumption_entry.get()),
                                                final_mass=float(self.stage3_final_mass_entry.get()),
                                                force=float(self.stage3_force_entry.get()),
                                                initial_mass=float(self.stage3_initial_mass_entry.get()),
-                                               time=float(self.stage3_time_entry.get()))
+                                               time=float(self.stage3_time_entry.get()),
+                                               stage_num=3)
             self.calculator.add_data_parachute(pcs_stages=float(self.stages_counter.get()),
                                                check_parachute=self.check_parachute.get())
 
@@ -280,7 +293,6 @@ class MainFrame(Frame):
             showerror(title='Input error',
                       message='Unable to count due to incorrect input format \nCheck all active entries')
             return
-
 
         if self.check_parachute.get():
             try:
@@ -304,6 +316,8 @@ class MainFrame(Frame):
         self.height_by_time_displayer.add_function_data(self.calculator.height_list)
         self.results_max_height_2['text'] = str(round(max(self.calculator.height_list.values()), 2)) + ' m'
         self.results_max_speed_2['text'] = str(round(max(self.calculator.velocity_list.values()), 2)) + ' m/s'
+        self.results_landing_velocity['text'] = str(round(-self.calculator.velocity_list[
+                                                              max(self.calculator.velocity_list.keys())], 2)) + ' m/s'
         self.results_time['text'] = str(round(max(self.calculator.velocity_list.keys()), 2)) + ' s'
 
     def change_stage_number(self):

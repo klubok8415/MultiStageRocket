@@ -146,6 +146,8 @@ class Calculator:
             if speed_for_cx > 0:
                 while round(speed_for_cx, 1) not in self.cx_dictionary.keys():
                     speed_for_cx -= 0.1
+                    if speed_for_cx < 0:
+                        break
                 current_resistance = self.cx_dictionary[round(speed_for_cx, 1)]
             else:
                 while round(speed_for_cx, 1) not in self.cx_dictionary.keys():
@@ -173,7 +175,6 @@ class Calculator:
             current_time += delta_t
 
             if current_time >= time and self.current_stage != self.parachute_data['pcs_stages']:
-                print('break')
                 break
 
             if self.current_height < 0:
@@ -187,7 +188,8 @@ class Calculator:
             self.count()
 
     def add_data_stage(self, **kwargs):
-
+        if kwargs['stage_num'] == 1:
+            self.stages_data.clear()
         self.stages_data.append(kwargs)
 
     def add_data_parachute(self, **kwargs):
