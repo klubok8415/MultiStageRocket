@@ -239,9 +239,7 @@ class MainFrame(Frame):
         self.calculator = Calculator()
         try:
             if self.stages_counter.get() == 1:
-                if float(self.parachute_time_entry.get()) < 10:
-                    showerror(title='Incorrect input', message='Parachute runs before the fall starts')
-                    return
+
                 self.calculator.add_data_stage(diameter=float(self.stage1_diameter_entry.get()),
                                                consumption=float(self.stage1_consumption_entry.get()),
                                                final_mass=float(self.stage1_final_mass_entry.get()),
@@ -295,6 +293,9 @@ class MainFrame(Frame):
             return
 
         if self.check_parachute.get():
+            if float(self.parachute_time_entry.get()) < 10:
+                showerror(title='Incorrect input', message='Parachute runs before the fall starts')
+                return
             try:
                 self.calculator.add_data_parachute(time=float(self.parachute_time_entry.get()),
                                                    check_parachute=self.check_parachute.get(),

@@ -3,7 +3,7 @@ from calculator import Calculator
 # One stage, 1 kg, consumption from 0.01 kg/s to 1kg/s
 
 with open('tests_result.txt', 'w') as file:
-    for consumption in range(10, 101, 10):
+    for consumption in range(10, 201, 10):
         force = 200 * consumption / 100
         calculator = Calculator()
         calculator.add_data_stage(
@@ -22,6 +22,8 @@ with open('tests_result.txt', 'w') as file:
                                       pcs_stages=1
                                       )
         calculator.count()
+        print(str(consumption / 100) + ' : ' + str(max(calculator.height_list.values())))
+        print(str(consumption / 100) + ' : ' + str(max(calculator.velocity_list.values())))
         file.write(str(consumption / 100) + ' : ' + str(max(calculator.height_list.values())))
         file.write('\n')
         print(str(consumption/100) + 'done!')
